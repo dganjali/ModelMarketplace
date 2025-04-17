@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
@@ -5,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const users = [];
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const app = express();
 
@@ -19,13 +21,12 @@ app.post('/api/auth/signup', async (req, res) => {
         
         if (users.find(user => user.email === email || user.username === username)) {
             return res.status(400).json({ message: 'User already exists' });
+
         }
         
-        // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         
-        // Create new user
         const newUser = {
             id: uuidv4(),
             username,

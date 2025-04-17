@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('password').value;
         
         try {
-            // This would connect to your Express backend in production
-            const response = await fetch('/api/auth/signin', {
+            const response = await fetch(`${window.APP_CONFIG.API_URL}/api/auth/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -20,14 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if (response.ok) {
-                // Save auth token to localStorage for session management
                 localStorage.setItem('authToken', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 
-                // Redirect to dashboard or home page
                 window.location.href = '/dashboard';
             } else {
-                // Display error message
                 alert(`Error: ${data.message}`);
             }
         } catch (error) {
