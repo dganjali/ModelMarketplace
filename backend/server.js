@@ -103,6 +103,20 @@ function authenticateToken(req, res, next) {
     });
 }
 
+// Update this line
+app.use(express.static('frontend'));
+
+// Add this route handler after your existing routes but before starting the server
+app.get('/', (req, res) => {
+    // Serve the signin.html file when accessing the root URL
+    res.sendFile('frontend/signin.html', { root: './' });
+});
+
+// Add a catch-all route to handle any other routes - must be added LAST
+app.get('*', (req, res) => {
+    res.redirect('/');
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
